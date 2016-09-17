@@ -7,6 +7,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  */
 public class Percolation {
     private WeightedQuickUnionUF wUF;
+    private WeightedQuickUnionUF wUFBottomLess;//Same to wUF, but without bottom virtual elem
     private int virtualTopIndex = 0;
     private int virtualBottomIndex;
     int dimension;
@@ -20,6 +21,7 @@ public class Percolation {
         dimension = n;
         virtualBottomIndex = n * n + 1;
         wUF = new WeightedQuickUnionUF(n * n + 2);
+        wUFBottomLess = new WeightedQuickUnionUF(n * n + 1);
         openedBlocks = new boolean[n][n];
     }
 
@@ -30,6 +32,7 @@ public class Percolation {
         }
         if (i == 1) {
             wUF.union(getWUFIndex(i, j), virtualTopIndex);
+            wUFBottomLess.union(getWUFIndex(i, j), virtualTopIndex);
         }
         if (i == dimension){
             wUF.union(getWUFIndex(i, j), virtualBottomIndex);
@@ -37,15 +40,19 @@ public class Percolation {
 
         if (i > 1 && isOpen(i - 1, j)) {
             wUF.union(getWUFIndex(i, j), getWUFIndex(i - 1, j));
+            wUFBottomLess.union(getWUFIndex(i, j), getWUFIndex(i - 1, j));
         }
         if (j > 1 && isOpen(i, j - 1)) {
             wUF.union(getWUFIndex(i, j), getWUFIndex(i, j - 1));
+            wUFBottomLess.union(getWUFIndex(i, j), getWUFIndex(i, j - 1));
         }
         if (i < dimension && isOpen(i + 1, j)) {
             wUF.union(getWUFIndex(i, j), getWUFIndex(i + 1, j));
+            wUFBottomLess.union(getWUFIndex(i, j), getWUFIndex(i + 1, j));
         }
         if (j < dimension && isOpen(i, j + 1)) {
             wUF.union(getWUFIndex(i, j), getWUFIndex(i, j + 1));
+            wUFBottomLess.union(getWUFIndex(i, j), getWUFIndex(i, j + 1));
         }
 
         openedBlocks[i - 1][j - 1] = true;
@@ -60,7 +67,10 @@ public class Percolation {
     public boolean isFull(int i, int j) {
         checkParams(i, j);
 
-        return wUF.connected(virtualTopIndex, getWUFIndex(i, j));
+        if(!isOpen(i,j)){
+            return false;
+        }
+        return wUFBottomLess.connected(virtualTopIndex, getWUFIndex(i, j));
     }
 
     private int getWUFIndex(int i, int j) {

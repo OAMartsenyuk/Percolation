@@ -49,13 +49,16 @@ public class PercolationStats {
     }
 
     public static void main(String[] args) {
-        int n = 200;
-        int t = 10000;
+        int n = 1000;
+        int t = 1000;
+        long start = System.currentTimeMillis();
         PercolationStats percolationStats = new PercolationStats(n,t);
 
         String confidence = percolationStats.confidenceLo() + ", " + percolationStats.confidenceHi();
         System.out.println("mean                    = " + percolationStats.mean());
         System.out.println("stddev                  = " + percolationStats.stddev());
         System.out.println("95% confidence interval = " + confidence);
+        long end = System.currentTimeMillis();
+        System.out.println("Duration is:" + (end-start));
     }
 }
