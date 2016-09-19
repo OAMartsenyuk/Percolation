@@ -1,5 +1,3 @@
-package com.marts;
-
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 /**
@@ -10,9 +8,9 @@ public class Percolation {
     private WeightedQuickUnionUF wUFBottomLess;//Same to wUF, but without bottom virtual elem
     private int virtualTopIndex = 0;
     private int virtualBottomIndex;
-    int dimension;
-    boolean[][] openedBlocks;
-    boolean percolates;
+    private int dimension;
+    private boolean[][] openedBlocks;
+    private boolean percolates;
 
     public Percolation(int n) {
         if (n < 1) {
